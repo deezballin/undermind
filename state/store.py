@@ -10,13 +10,17 @@ expose query(stem_words) -> related context. The mock here returns a stub.
 """
 import os
 
-VAULT = r"os.environ.get("UNDERMIND_VAULT", "<path-to-your-vault>")"
-MEMORY = r"os.environ.get("UNDERMIND_MEMORY", "<path-to-your-memories>")"
+
+def _env_path(name: str, placeholder: str) -> str:
+    return os.environ.get(name, placeholder)
+
 
 def load_corpus():
     """Return list of (path, text) from vault + memory. Local read only."""
+    vault_root = _env_path("UNDERMIND_VAULT", "<path-to-your-vault>")
+    memory_root = _env_path("UNDERMIND_MEMORY", "<path-to-your-memories>")
     docs = []
-    for root in (VAULT, MEMORY):
+    for root in (vault_root, memory_root):
         if not os.path.isdir(root):
             continue
         for f in os.listdir(root):
@@ -29,10 +33,12 @@ def load_corpus():
                     pass
     return docs
 
+
 def query(stem_words, top_k=5):
     """MOCK associative pull: return stub context for the given stem words.
     Real version: embed stem_words, cosine-rank corpus, return top_k."""
     return [f"[assoc-stub for {w}]" for w in stem_words[:top_k]]
+
 
 if __name__ == "__main__":
     docs = load_corpus()
