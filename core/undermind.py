@@ -95,6 +95,6 @@ class Undermind:
 
     # ---- dream loop stub (between turns) ----
     def dream(self):
-        """Offline consolidation hook. Real version: feelings/soul skills.
+        """Offline consolidation hook. Real version: improve branch quality over time.
         For the core proof this just logs that a dream cycle ran."""
         return {"dreamed": True, "turn": self.turn}

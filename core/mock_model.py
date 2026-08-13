@@ -11,25 +11,17 @@ daemon never crashes. No OS keys, no off-box traffic — pure localhost.
 """
 from itertools import product
 
-# Tiny ontology: topics the agent might encounter. Real version pulls these
-# from the associative memory store (owned memory + Obsidian vault).
+# Topic taxonomy: the drafter's candidate buckets. Real version pulls these
+# from the associative memory store.
 TOPICS = {
-    "greeting":  {"hi", "hello", "hey", "sup"},
-    "coding":    {"code", "build", "python", "bug", "function", "deploy", "test"},
-    "emotional": {"sad", "upset", "love", "hurt", "feel", "scared", "tired", "numb", "empty"},
-    "grief":     {"dead", "died", "gone", "lost", "grief", "passed", "friend",
-                  "miss", "alone", "hurt", "broken", "cry", "tears", "funeral"},
-    # Grief = loss of a person / presence. It is NOT "negative to fix" -- the
-    # subconscious stays *with* it, not rush to comfort. "loss"/"lost" are
-    # intentionally excluded from auto-grief: "loss" = ML loss fn (technical),
-    # "lost" is ambiguous (lost keys / lost direction / lost a game). Keyword
-    # match can't disambiguate -- that's why the real context-aware tiny
-    # drafter is the next step, not more keywords.
-    "osint":     {"find", "locate", "person", "search", "missing", "where"},
-    "hardware":  {"pi", "npu", "gpu", "ram", "model", "server", "lmstudio"},
+    "greeting": {"hi", "hello", "hey", "sup"},
+    "coding": {"code", "build", "python", "bug", "function", "deploy", "test"},
+    "hardware": {"pi", "npu", "gpu", "ram", "model", "server", "lmstudio"},
     "evolution": {"evolve", "undermind", "subconscious", "learn", "grow"},
+    "osint": {"find", "locate", "person", "search", "missing", "where"},
+    "ops": {"run", "start", "stop", "restart", "status", "logs", "config"},
 }
-INTENTS = ["acknowledge", "question", "propose", "challenge", "comfort", "build"]
+INTENTS = ["acknowledge", "question", "propose", "challenge", "build", "summarize"]
 
 def _topic_of(words):
     """Return the dominant topic for a set of stream words."""
@@ -111,10 +103,7 @@ def _mock_fan(seed_words, n=1000):
         kws = TOPICS[top]
         for i in range(per):
             sig = set(kws)
-            if top == "grief":
-                resp = f"[stay] I'm here with you -- re: {top} ({i})"
-            else:
-                resp = f"[{intent}] re: {top} ({i}) -- pre-ready branch response"
+            resp = f"[{intent}] re: {top} ({i}) -- pre-ready branch response"
             branches.append({
                 "id": f"mock:{top}:{intent}:{i}",
                 "topic": top,

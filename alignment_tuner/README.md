@@ -21,7 +21,7 @@ the EUREKA mechanism without drifting into generic chat.
 
 ## Safety
 
-- Do not train on operator persona/feelings/private memories.
+- Do not train on operator private memory or personal data.
 - Training data should be mechanism-shaped only: stream words, branch score,
   selected response. No identity state.
 

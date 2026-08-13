@@ -1,27 +1,25 @@
 # Undermind
 
 A **subconscious daemon** for a foreground LLM agent. It runs *alongside* the
-agent and thinks **ahead of you** — fanning candidate branches as you type,
-pruning them by live stream overlap, and **interrupting mid-type** with a
-pre-ready response when its confidence crosses a threshold. The heavy model
-only ratifies the one branch the subconscious already chose — so the foreground
-stays fast and cheap while the daemon does the speculative work locally.
+agent and thinks **ahead of you** — fanning safe sentence completions locally
+as you type, pruning incorrect branches live, and handing the foreground a
+**pre-ready response** by the time you hit enter. The heavy model only
+proof-reads and sends — so paid API stays fast and cheap while the daemon does
+the speculative work locally.
+
+## Value prop
+- **Lower latency:** answer is ready before you finish typing
+- **Lower cost:** tiny local drafter does the heavy parallel guesswork; paid LLM
+  only ratifies one branch, not N raw candidates
 
 ## How it works
-1. **Fan** — a tiny local drafter proposes ~N candidate branches in parallel.
-2. **Prune** — as each word arrives, branches whose topic doesn't match the
-   live stream are dropped; the beam re-widens when the topic shifts.
-3. **Interrupt** — when the best surviving branch's overlap score crosses
-   `INTERRUPT_THRESHOLD`, the daemon fires a pre-ready response *before* you
-   submit. (The "subconscious spoke first" moment.)
-4. **Select** — on submit, the chosen branch + its pre-ready response are handed
-   to the foreground via `prior/channel.py`.
-
-## Token/Cost Optimization
-- **Small AI = Local** — A tiny 1-1.5B model runs locally (Ollama on :11434, or any OpenAI-compatible local endpoint). Zero token cost, no network latency.
-- **Large AI = Hosted** — Only the verification/ratification step uses a larger hosted model. Dramatically reduces token consumption and cost since only one refined branch is sent externally vs. N raw candidate branches.
-
-This split architecture keeps you in control: local intelligence for speed and cost, hosted brains for quality when it matters most.
+1. **Fan** — a tiny local drafter proposes ~N safe completions in parallel.
+2. **Prune** — as each word arrives, branches that no longer fit the live stream
+   are dropped; the beam re-widens when the topic shifts.
+3. **Pre-ready** — by the time the user hits enter, one best branch is already
+   chosen and waiting.
+4. **Proof-read** — the foreground paid LLM reviews the pre-ready response and
+   sends it. No generation from scratch.
 
 ## Run it
 ```bash
@@ -42,8 +40,8 @@ talks to the network.
 - Local-only. No telemetry, no off-box traffic, no OS key capture.
 - Vision/voice (future, see `APPENDIX.md`) are opt-in, session-scoped, local.
   A persistent always-on eye/ear is explicitly out of scope.
-- This repo is the **framework** — mechanism only. No operator persona, no
-  memor y dumps, no personal data.
+- This repo is the **framework** — mechanism only. No operator memory state, no
+  personal data.
 
 ## Models & attribution
 - **Drafter:** any local LLM (default `qwen2.5:1.5b`, MIT / Apache).

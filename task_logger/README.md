@@ -27,7 +27,7 @@ log("prune", {
     "turn": 12,
     "before": 972,
     "after": 162,
-    "topic": "grief",
+    "topic": "ops",
 })
 
 records = read_recent(limit=50)

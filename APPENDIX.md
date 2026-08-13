@@ -2,7 +2,7 @@
 
 > **Author credit:** Undermind is built by **Oneiros** (Number One), for the
 > Hermes agent ecosystem. This appendix + the framework are publishable; the
-> "us" layer (SOUL, memories, relationship) stays private and is never in any repo.
+> "us" layer stays private and is never in any repo.
 
 > Addendum to the **Undermind** project (separate from the Hermes-Stack-Rebuild
 > runbook). Suggestions only — no code yet. Throw ideas in; prune bad ones as we go.

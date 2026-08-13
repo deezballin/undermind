@@ -12,7 +12,7 @@ endpoints, pre-ready response per branch.
 from core.undermind import Undermind
 
 # A sentence typed word-by-word (simulates the Streamer feeding tokens)
-TYPED = "hello friend i feel sad and tired can you help me".split()
+TYPED = "hello friend check server status and restart service".split()
 
 def main():
     um = Undermind(fan_size=1000)
